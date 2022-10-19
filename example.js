@@ -6,6 +6,7 @@ import {
   Cycle,
   If,
   Ternary,
+  Route,
 } from "cample";
 
 const header = new Component(
@@ -136,11 +137,22 @@ const ternary = new Ternary(
   ["text1-component", "text2-component"],
   true
 );
+const routeComponent = new Component("route-component", "route");
+const route = new Route(
+  "#route",
+  "{{routeComponent}}",
+  { routeComponent },
+  "/example.html"
+);
 const content = new Component(
   "content-component",
   `
         <h2>Content:</h2>
         <div class="example_content">
+            <div>
+                <h3>Route:</h3>
+                <div id="route"></div>
+            </div>
             <div>
                 <h3>Cycle:</h3>
                 <cycle-component></cycle-component>
@@ -168,7 +180,7 @@ const content = new Component(
     style: `
             .example_content{
                 display:grid;
-                grid-template-columns:repeat(3,1fr);
+                grid-template-columns:repeat(4,1fr);
             }
         `,
   }
@@ -188,7 +200,8 @@ const footer = new Component(
         `,
   }
 );
-new Cample("#example").render(
+const newCample = new Cample("#example");
+newCample.render(
   `
         <div class="example_page">
             {{header}}
@@ -211,3 +224,4 @@ new Cample("#example").render(
     footer,
   }
 );
+newCample.renderRoutes({ route });
