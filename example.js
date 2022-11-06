@@ -7,6 +7,7 @@ import {
   If,
   Ternary,
   Route,
+  RouteLink,
 } from "cample";
 
 const header = new Component(
@@ -28,6 +29,19 @@ const header = new Component(
       link1: "link1",
       link2: "link2",
     },
+    attributes: {
+      id: "id",
+    },
+    script: [
+      (elements) => {
+        elements.el.addEventListener("click", () => {
+          console.log("example");
+        });
+      },
+      {
+        elements: [{ el: ".example_menu" }],
+      },
+    ],
     style: `
             #example{
                 height:calc(100% - 23px);
@@ -96,6 +110,7 @@ const text = new Component(
             .example_text_text{
                 margin:auto;
                 font-size:30px;
+                cursor:pointer;
             }
         `,
     data: {
@@ -105,6 +120,34 @@ const text = new Component(
 );
 const text1 = new Component("text1-component", "Text1");
 const text2 = new Component("text2-component", "Text2");
+const componentRouteLink1 = new Component(
+  "routelink1-component",
+  "<span class='example_route'>Route</span>",
+  {
+    style: `.example_route{
+            cursor:pointer;
+        }`,
+  }
+);
+const componentRouteLink2 = new Component(
+  "routelink2-component",
+  "<span class='example_route1'>Route1</span>",
+  {
+    style: `.example_route1{
+            cursor:pointer;
+        }`,
+  }
+);
+const routeLink1 = new RouteLink(
+  "new-routelink1",
+  "routelink1-component",
+  "/example.html"
+);
+const routeLink2 = new RouteLink(
+  "new-routelink2",
+  "routelink2-component",
+  "/example/example.html"
+);
 const animation = new AnimationComponent(
   "animation-component",
   "text-component",
@@ -138,11 +181,18 @@ const ternary = new Ternary(
   true
 );
 const routeComponent = new Component("route-component", "route");
+const routeComponent1 = new Component("route-component1", "route1");
 const route = new Route(
   "#route",
   "{{routeComponent}}",
   { routeComponent },
   "/example.html"
+);
+const route1 = new Route(
+  "#route",
+  "{{routeComponent1}}",
+  { routeComponent1 },
+  "/example/example.html"
 );
 const content = new Component(
   "content-component",
@@ -151,6 +201,8 @@ const content = new Component(
         <div class="example_content">
             <div>
                 <h3>Route:</h3>
+                <new-routelink1></new-routelink1>
+                <new-routelink2></new-routelink2>
                 <div id="route"></div>
             </div>
             <div>
@@ -200,7 +252,9 @@ const footer = new Component(
         `,
   }
 );
-const newCample = new Cample("#example");
+const newCample = new Cample("#example", {
+  mode: { value: "watch", styleId: "cample-examples-styles" },
+});
 newCample.render(
   `
         <div class="example_page">
@@ -212,6 +266,8 @@ newCample.render(
   {
     header,
     content,
+    routeLink1,
+    routeLink2,
     cycle,
     item,
     animation,
@@ -219,9 +275,11 @@ newCample.render(
     addition,
     newIf,
     ternary,
+    componentRouteLink1,
+    componentRouteLink2,
     text1,
     text2,
     footer,
   }
 );
-newCample.renderRoutes({ route });
+newCample.renderRoutes({ route, route1 });
