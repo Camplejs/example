@@ -1,14 +1,6 @@
-import {
-  Addition,
-  AnimationComponent,
-  Cample,
-  Component,
-  Cycle,
-  If,
-  Ternary
-} from "cample";
+import { addition, animationComponent, cample, component, cycle, ifComponent, ternary } from "cample";
 
-const header = new Component(
+ const header = component(
   "header-component",
   `<header class="example_header">
         <a href="#">
@@ -56,7 +48,7 @@ const header = new Component(
         `,
   }
 );
-const item = new Component(
+const item = component(
   "item-component",
   `
         <div>
@@ -72,13 +64,13 @@ const item = new Component(
     },
   }
 );
-const cycle = new Cycle("cycle-component", ["item-component"], 3, {
+const cycleComponent = cycle("cycle-component", ["item-component"], 3, {
   element: {
     selector: "div",
     class: "example_items",
   },
 });
-const text = new Component(
+const text = component(
   "text-component",
   `
         <div class="example_text">
@@ -94,6 +86,7 @@ const text = new Component(
             }
             .example_text_text{
                 margin:auto;
+                cursor:pointer;
                 font-size:30px;
             }
         `,
@@ -102,9 +95,9 @@ const text = new Component(
     },
   }
 );
-const text1 = new Component("text1-component", "Text1");
-const text2 = new Component("text2-component", "Text2");
-const animation = new AnimationComponent(
+const text1 = component("text1-component", "Text1");
+const text2 = component("text2-component", "Text2");
+const animation = animationComponent(
   "animation-component",
   "text-component",
   {
@@ -126,17 +119,17 @@ const animation = new AnimationComponent(
         `,
   }
 );
-const addition = new Addition("addition-component", [
+const additionComponent = addition("addition-component", [
   "text1-component",
   "text2-component",
 ]);
-const newIf = new If("if-component", ["text1-component"], true);
-const ternary = new Ternary(
+const newIf = ifComponent("if-component", ["text1-component"], true);
+const ternaryComponent = ternary(
   "ternary-component",
   ["text1-component", "text2-component"],
   true
 );
-const content = new Component(
+const content = component(
   "content-component",
   `
         <h2>Content:</h2>
@@ -173,7 +166,7 @@ const content = new Component(
         `,
   }
 );
-const footer = new Component(
+const footer = component(
   "footer-component",
   `
         <footer class="example_footer">
@@ -188,7 +181,7 @@ const footer = new Component(
         `,
   }
 );
-new Cample("#example").render(
+cample("#example").render(
   `
         <div class="example_page">
             {{header}}
@@ -199,13 +192,13 @@ new Cample("#example").render(
   {
     header,
     content,
-    cycle,
+    cycleComponent,
     item,
     animation,
     text,
-    addition,
+    additionComponent,
     newIf,
-    ternary,
+    ternaryComponent,
     text1,
     text2,
     footer,
