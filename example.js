@@ -1,6 +1,6 @@
 import { addition, animationComponent, cample, component, cycle, ifComponent, ternary } from "cample";
 
- const header = component(
+  const header = component(
   "header-component",
   `<header class="example_header">
         <a href="#">
@@ -48,6 +48,7 @@ import { addition, animationComponent, cample, component, cycle, ifComponent, te
         `,
   }
 );
+
 const item = component(
   "item-component",
   `
@@ -129,6 +130,32 @@ const ternaryComponent = ternary(
   ["text1-component", "text2-component"],
   true
 );
+const inputComponent = component("input-component",`
+  <label data-value="{{inputValue}}">{{inputValue}}</label><br/>
+  <input id="textInput" name="input" value="{{inputValue}}" />
+`,  {
+    script:[(elements,functions)=>{
+      const inputFunction = (e) =>{
+          functions?.inputFunction(data=>{
+            return{...data,value:e.target.value}
+          });
+          elements?.input?.removeEventListener("input",inputFunction);
+      }
+      elements?.input?.addEventListener("input",inputFunction);
+  },
+  {
+      start:'afterLoad',
+      elements:[
+          {input:"#textInput"}
+      ]
+  }],
+  data: {
+    inputValue: {
+      value: "Text here",
+      function: "inputFunction",
+    },
+  },
+})
 const content = component(
   "content-component",
   `
@@ -156,6 +183,7 @@ const content = component(
                 true ? Text1 : Text2 = <ternary-component></ternary-component>
             </div>
         </div>
+        <input-component></input-component>
     `,
   {
     style: `
@@ -192,6 +220,7 @@ cample("#example").render(
   {
     header,
     content,
+    inputComponent,
     cycleComponent,
     item,
     animation,
