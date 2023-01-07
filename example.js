@@ -1,6 +1,6 @@
 import { addition, animationComponent, cample, component, cycle, ifComponent, ternary } from "cample";
 
-  const header = component(
+const header = component(
   "header-component",
   `<header class="example_header">
         <a href="#">
@@ -131,8 +131,10 @@ const ternaryComponent = ternary(
   true
 );
 const inputComponent = component("input-component",`
+  <span>Texts:{{textValue}}<br/></span>
   <label data-value="{{inputValue}}">{{inputValue}}</label><br/>
   <input id="textInput" name="input" value="{{inputValue}}" />
+  <button id="addText">Add text</button>
 `,  {
     script:[(elements,functions)=>{
       const inputFunction = (e) =>{
@@ -140,13 +142,31 @@ const inputComponent = component("input-component",`
             return{...data,value:e.target.value}
           });
           elements?.input?.removeEventListener("input",inputFunction);
+          elements?.addText?.removeEventListener("click",addFunction);
       }
       elements?.input?.addEventListener("input",inputFunction);
+
+      const addFunction = () =>{
+        const component = document.querySelector("input-component");
+        const newEl = document.createElement("label");
+        newEl.setAttribute("data-value","{{inputValue}}")
+        newEl.innerHTML="{{inputValue}}";
+        const newBr = document.createElement("br");
+        component.insertBefore(newEl,elements?.input);
+        component.insertBefore(newBr,elements?.input);
+        functions?.addFunction(data=>{
+          return{...data,value:data.value+1}
+        });
+        elements?.input?.removeEventListener("input",inputFunction);
+        elements?.addText?.removeEventListener("click",addFunction);
+      }
+      elements?.addText?.addEventListener("click",addFunction);
   },
   {
       start:'afterLoad',
       elements:[
-          {input:"#textInput"}
+          {input:"#textInput"},
+          {addText:"#addText"}
       ]
   }],
   data: {
@@ -154,6 +174,10 @@ const inputComponent = component("input-component",`
       value: "Text here",
       function: "inputFunction",
     },
+    textValue:{
+      value:1,
+      function:"addFunction"
+    }
   },
 })
 const content = component(
@@ -198,7 +222,7 @@ const footer = component(
   "footer-component",
   `
         <footer class="example_footer">
-            Example. ${new Date().getFullYear()} year.
+            Example of a <a href="https://www.npmjs.com/package/cample" target="_blank" rel="noopener noreferrer">Cample.js</a> work. 2022-${new Date().getFullYear()}
         </footer>
     `,
   {
